@@ -151,7 +151,7 @@ void WiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
     Serial.println(IPAddress(info.got_ip.ip_info.ip.addr));
 }
 
-bool SendMachineState(const char* url,const char* machine_id, int machine_state){
+bool SendMachineState(const char* url,const char* machine_id, int machine_state, int activity_code_id){
   if(WiFi.status()== WL_CONNECTED){
       WiFiClient client;
       HTTPClient http;
@@ -161,7 +161,7 @@ bool SendMachineState(const char* url,const char* machine_id, int machine_state)
         s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\"}");
       }
       else{
-        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\",\"activity_code_id\":\"" + String(4) + "\"}");
+        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\",\"activity_code_id\":\"" + String(activity_code_id) + "\"}");
       }
 
       http.begin(client, url);
@@ -225,12 +225,12 @@ void loop() {
   if(button18.current_state == 0 && button18.last_state == 1) {
     Serial.printf("BUTTON PUSHED: %d \n", digitalRead(button18.BUTTON_PIN));
     digitalWrite(ONBOARD_LED, digitalRead(button18.BUTTON_PIN));
-    SendMachineState(OEE_URL_MACHINE_STATE, "1", digitalRead(button18.BUTTON_PIN));
+    SendMachineState(OEE_URL_MACHINE_STATE, "1", digitalRead(button18.BUTTON_PIN), 4);
   }
   else if (button18.current_state == 1 && button18.last_state == 0) {
     Serial.printf("BUTTON RELEASED: %d \n", digitalRead(button18.BUTTON_PIN));
     digitalWrite(ONBOARD_LED, digitalRead(button18.BUTTON_PIN));
-    SendMachineState(OEE_URL_MACHINE_STATE, "1", digitalRead(button18.BUTTON_PIN));
+    SendMachineState(OEE_URL_MACHINE_STATE, "1", digitalRead(button18.BUTTON_PIN), 4);
   }
   // put your main code here, to run repeatedly:
 }
