@@ -13,7 +13,7 @@ struct Button {
 Button button18 = {BUTTON_PIN, false, false};
 
 // OEE URL 
-char OEE_URL_MACHINE_STATE[] = "http://192.168.0.141/api/machine-state-change";
+char OEE_URL_MACHINE_STATE[] = "http://10.30.47.21/api/machine-state-change";
 
 /*
 * WiFi Events
@@ -158,10 +158,10 @@ bool SendMachineState(const char* url,const char* machine_id, int machine_state,
       String s;
       if(machine_state == 1)
       {
-        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\"}");
+        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\",\"activity_code_id\":\"" + String(1) + "\"}");
       }
       else{
-        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\",\"activity_code_id\":\"" + String(activity_code_id) + "\"}");
+        s = String("{\"machine_id\":\"") + String(machine_id) + String("\",\"machine_state\":\"" + String(machine_state) + "\",\"activity_code_id\":\"" + String(2) + "\"}");
       }
 
       http.begin(client, url);
@@ -184,7 +184,7 @@ bool SendMachineState(const char* url,const char* machine_id, int machine_state,
 
 void setup() {
   Serial.begin(115200);
-
+  Serial.println(OEE_URL_MACHINE_STATE);
   // Setting up button & internal pull up
   pinMode(button18.BUTTON_PIN, INPUT_PULLUP);
   pinMode(ONBOARD_LED, OUTPUT);
